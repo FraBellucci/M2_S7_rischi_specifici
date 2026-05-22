@@ -237,32 +237,35 @@ function checkMemMatch(){
 const SCENES=[
   {
     title:"Gestione lavoratrice in gravidanza",
-    imgHint:"Foto: lavoratrice in ufficio/reparto",
+    imgSrc: "images/gravidanza.jpg",
+    imgHint:"Foto: lavoratrice in ufficio/reparto – es. postazione VDT o linea produzione",
     items:[
       {text:"La lavoratrice in gravidanza ha diritto all'astensione anticipata dal lavoro se esposta a rischi specifici non eliminabili", correct:true},
       {text:"Il DL può legittimamente spostare la lavoratrice a mansioni equivalenti o inferiori per eliminare il rischio", correct:true},
-      {text:"La lavoratrice deve comunicare la gravidanza entro 30 giorni dal concepimento per attivare le tutele", correct:false, why:"La comunicazione non ha un termine fisso di 30 giorni dal concepimento. Le tutele scattano dalla comunicazione della gravidanza al DL senza termine prefissato. L'obbligo del DL sorge dalla comunicazione, non esiste un termine di 30 giorni."},
+      {text:"La lavoratrice deve comunicare la gravidanza entro 30 giorni dal concepimento per attivare le tutele", correct:false, why:"La comunicazione non ha un termine fisso di 30 giorni dal concepimento. Le tutele scattano dalla comunicazione della gravidanza al DL (senza termine prefissato) o dalla certificazione medica. L'obbligo del DL di valutare i rischi e adottare misure sorge dalla comunicazione, non esiste un termine di 30 giorni."},
       {text:"Il lavoro notturno è vietato per le lavoratrici in gravidanza e fino a un anno di vita del bambino", correct:true},
     ]
   },
   {
     title:"Valutazione stress lavoro-correlato",
-    imgHint:"Foto: riunione team, lavoratore alla scrivania",
+    imgSrc: "images/stress.jpg",
+    imgHint:"Foto: riunione team, lavoratore alla scrivania, ambiente ufficio open space",
     items:[
-      {text:"La valutazione dello stress lavoro-correlato può essere saltata se nessun lavoratore ha presentato segnalazioni formali", correct:false, why:"La valutazione dello stress lavoro-correlato è obbligatoria ai sensi dell'Art. 28 D.Lgs. 81/08 indipendentemente da segnalazioni. Va effettuata proattivamente in due fasi: preliminare e approfondita."},
-      {text:"La fase preliminare analizza indicatori oggettivi: infortuni, assenteismo, turnover e richieste di visita medica", correct:true},
-      {text:"Se la valutazione preliminare non rileva criticità, non è necessaria la fase approfondita con questionari", correct:true},
-      {text:"Il DVR deve contenere il metodo di valutazione utilizzato e le misure correttive adottate", correct:true},
+      {text:"La valutazione dello stress lavoro-correlato può essere saltata se nessun lavoratore ha presentato segnalazioni formali di disagio", correct:false, why:"La valutazione dello stress lavoro-correlato è obbligatoria ai sensi dell'Art. 28 D.Lgs. 81/08 indipendentemente da segnalazioni dei lavoratori. Va effettuata proattivamente seguendo le indicazioni della Commissione Consultiva (Accordo Europeo 2004) in due fasi: preliminare e approfondita."},
+      {text:"La fase preliminare di valutazione analizza indicatori oggettivi: infortuni, assenteismo, turnover e richieste di visita medica", correct:true},
+      {text:"Se la valutazione preliminare non rileva indicatori critici, non è necessaria la fase approfondita con questionari ai lavoratori", correct:true},
+      {text:"Il DVR deve contenere la descrizione del metodo di valutazione utilizzato e le misure correttive adottate", correct:true},
     ]
   },
   {
-    title:"Rischi per lavoratori giovani e anziani",
-    imgHint:"Foto: ambiente produttivo con mix generazionale",
+    title:"Rischi specifici per lavoratori giovani e anziani",
+    imgSrc: "images/vulnerabili.jpg",
+    imgHint:"Foto: ambiente produttivo con mix generazionale di lavoratori",
     items:[
-      {text:"I lavoratori under 18 non possono essere adibiti a lavori con esposizione ad agenti chimici cancerogeni", correct:true},
-      {text:"Il lavoratore over 55 non necessita di valutazione specifica se è già in sorveglianza sanitaria periodica", correct:false, why:"La valutazione dei rischi per lavoratori anziani è un obbligo specifico dell'Art. 28 indipendente dalla sorveglianza sanitaria. Il DVR deve contenere misure specifiche anche se la sorveglianza sanitaria è già attiva."},
-      {text:"Il lavoro notturno prolungato comporta rischi maggiori per i lavoratori anziani rispetto ai giovani", correct:true},
-      {text:"La valutazione dei rischi di genere include fattori biologici e sociali che differenziano l'esposizione", correct:true},
+      {text:"I lavoratori under 18 non possono essere adibiti a lavori con esposizione a agenti chimici cancerogeni", correct:true},
+      {text:"Il lavoratore anziano over 55 non necessita di valutazione specifica se è già in sorveglianza sanitaria periodica", correct:false, why:"La valutazione dei rischi per lavoratori anziani è un obbligo specifico dell'Art. 28 indipendente dalla sorveglianza sanitaria. L'età influenza la vulnerabilità a rischi ergonomici, il recupero da fatica, la tolleranza ai turni notturni e il carico cognitivo. Il DVR deve contenere misure specifiche (adeguamento carichi, pause, orari) anche se la sorveglianza sanitaria è già attiva."},
+      {text:"Il lavoro notturno prolungato comporta rischi specifici maggiori per i lavoratori anziani rispetto ai giovani", correct:true},
+      {text:"La valutazione dei rischi di genere include l'analisi di fattori biologici e sociali che differenziano l'esposizione tra uomini e donne", correct:true},
     ]
   },
 ];
