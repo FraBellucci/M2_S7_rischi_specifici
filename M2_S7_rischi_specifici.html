@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M2 S7 – Rischi Specifici: Genere, Età, Gravidanza, Stress</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#4a148c,#6a1b9a,#7b1fa2);min-height:100vh;overflow:hidden;display:flex;justify-content:center;align-items:center}
+.container{background:#fff;width:800px;height:550px;display:flex;flex-direction:column;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.header{background:linear-gradient(135deg,#4a148c,#6a1b9a);color:#fff;padding:11px 18px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.header h1{font-size:15px;font-weight:700}.header p{font-size:11px;opacity:.8;margin-top:1px}
+button{padding:7px 13px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;transition:all .2s}
+.btn-white{background:#fff;color:#4a148c}.btn-white:hover{background:#f3e5f5}
+.btn-outline{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4)}.btn-outline:hover{background:rgba(255,255,255,.25)}
+.btn-group{display:flex;gap:8px}
+.content{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.hidden{display:none!important}
+
+/* INSTRUCTIONS */
+.instr{padding:18px 24px;overflow-y:auto;flex:1}
+.instr h2{color:#4a148c;font-size:16px;margin-bottom:10px}
+.instr p,.instr li{font-size:13px;line-height:1.6;color:#444;margin-bottom:5px}
+.instr ul{margin-left:18px;margin-bottom:8px}
+.phases-row{display:flex;gap:8px;margin:10px 0}
+.phase-card{flex:1;background:#f3e5f5;border:2px solid #7b1fa2;border-radius:7px;padding:8px 10px;font-size:12px;color:#4a148c;font-weight:700;text-align:center;line-height:1.4}
+.start-btn{background:linear-gradient(135deg,#4a148c,#6a1b9a);color:#fff;padding:11px 32px;font-size:14px;border-radius:8px;display:block;margin:14px auto 0}
+.start-btn:hover{transform:translateY(-2px)}
+
+/* MEMORY PHASE */
+.game-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:10px 14px;gap:8px}
+.phase-hdr{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.phase-badge{background:#6a1b9a;color:#fff;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700}
+.phase-title{font-size:13px;font-weight:700;color:#4a148c}
+.score-r{margin-left:auto;font-size:12px;color:#666}
+.status-bar{display:flex;gap:16px;align-items:center;flex-shrink:0;font-size:12px;color:#555}
+.status-bar b{color:#4a148c}
+.mem-grid{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:7px;overflow:hidden}
+.mem-card{border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;text-align:center;padding:8px;transition:all .3s;line-height:1.35;user-select:none;min-height:0}
+.mem-card.back{background:linear-gradient(135deg,#4a148c,#7b1fa2);color:#fff;font-size:18px}
+.mem-card.back:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.mem-card.flipped{background:#fff;border:2px solid #ce93d8;color:#333;font-size:11px}
+.mem-card.matched-0{background:#1565c0;color:#fff;border:2px solid #0d47a1;cursor:default}
+.mem-card.matched-1{background:#c62828;color:#fff;border:2px solid #7f0000;cursor:default}
+.mem-card.matched-2{background:#e65100;color:#fff;border:2px solid #bf360c;cursor:default}
+.mem-card.matched-3{background:#2e7d32;color:#fff;border:2px solid #1b5e20;cursor:default}
+.mem-card.matched-4{background:#6a1b9a;color:#fff;border:2px solid #4a148c;cursor:default}
+.mem-card.matched-5{background:#00695c;color:#fff;border:2px solid #004d40;cursor:default}
+.mem-card.matched-6{background:#ef6c00;color:#fff;border:2px solid #e65100;cursor:default}
+.mem-card.matched-7{background:#558b2f;color:#fff;border:2px solid #33691e;cursor:default}
+
+/* TROVA ERRORE PHASE */
+.errore-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:10px 14px;gap:8px}
+.scene-area{flex:1;display:flex;gap:12px;overflow:hidden;min-height:0}
+.img-side{flex:1;display:flex;flex-direction:column;gap:6px;min-height:0}
+.img-placeholder{flex:1;background:#f3e5f5;border:3px dashed #7b1fa2;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:0;position:relative}
+.img-placeholder img{width:100%;height:100%;object-fit:cover;border-radius:8px;display:block}
+.img-placeholder.no-img{display:flex}
+.img-placeholder.has-img{padding:0}
+.ph-icon{font-size:36px;opacity:.4}
+.ph-text{font-size:11px;color:#7b1fa2;font-weight:600;text-align:center;padding:0 10px;opacity:.7}
+.ph-hint{font-size:10px;color:#555;text-align:center;padding:0 8px;background:#fff;border-radius:4px;padding:3px 8px}
+.errors-side{width:230px;display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+.errors-side h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#555;flex-shrink:0}
+.error-items{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:5px}
+.error-item{background:#fff;border:2px solid #ce93d8;border-radius:7px;padding:8px 10px;font-size:11px;color:#333;line-height:1.35;cursor:pointer;transition:all .2s;font-weight:600}
+.error-item:hover:not(.answered){border-color:#6a1b9a;background:#f3e5f5}
+.error-item.correct-e{border-color:#2e7d32;background:#e8f5e9;color:#1b5e20;cursor:default}
+.error-item.wrong-e{border-color:#c62828;background:#ffebee;color:#7f0000;cursor:default}
+.error-item.answered{cursor:default}
+.fb-strip{background:#e3f2fd;border-left:3px solid #1565c0;border-radius:6px;padding:8px 10px;font-size:11px;line-height:1.5;color:#0d47a1;display:none;flex-shrink:0}
+.fb-strip.show{display:block}
+.next-scene-btn{align-self:center;background:linear-gradient(135deg,#4a148c,#6a1b9a);color:#fff;padding:8px 20px;font-size:12px;border-radius:7px;display:none;flex-shrink:0}
+.next-scene-btn.show{display:block}
+.scene-prog{font-size:11px;color:#777;flex-shrink:0;text-align:center}
+
+/* FEEDBACK */
+.fb-page{flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
+.fb-box{text-align:center;max-width:500px}
+.fb-icon{font-size:55px;margin-bottom:12px}
+.fb-box h2{font-size:22px;font-weight:700;color:#4a148c;margin-bottom:8px}
+.fb-box p{font-size:13px;color:#555;line-height:1.6;margin-bottom:15px}
+.fb-score{background:#f3e5f5;border-radius:10px;padding:10px 20px;font-size:15px;font-weight:700;color:#6a1b9a;margin-bottom:15px;display:inline-block}
+.fb-btns{display:flex;gap:10px;justify-content:center}
+.btn-prim{background:linear-gradient(135deg,#4a148c,#6a1b9a);color:#fff;padding:10px 24px;font-size:13px;border-radius:8px}
+.btn-sec{background:#78909c;color:#fff;padding:10px 24px;font-size:13px;border-radius:8px}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div>
+      <h1>Rischi Specifici: Genere, Età, Gravidanza, Stress</h1>
+      <p>Modulo 2 · Sezione 7</p>
+    </div>
+    <div class="btn-group">
+      <button class="btn-outline" onclick="resetGame()">🔄 Ricomincia</button>
+      <button class="btn-white" onclick="window.close()">✕ Torna al Corso</button>
+    </div>
+  </div>
+  <div class="content">
+
+    <!-- INSTRUCTIONS -->
+    <div id="instrPage" class="instr">
+      <h2>🎯 Obiettivo</h2>
+      <p>Il gioco si svolge in due fasi per esplorare i rischi specifici legati alle differenze individuali.</p>
+      <div class="phases-row">
+        <div class="phase-card">Fase 1<br><span style="font-weight:400;font-size:10px">Memory: abbina concetto e definizione su genere, età, gravidanza e stress lavoro-correlato</span></div>
+        <div class="phase-card">Fase 2<br><span style="font-weight:400;font-size:10px">Trova l'errore: identifica le affermazioni scorrette in scenari aziendali reali</span></div>
+      </div>
+      <ul>
+        <li><strong>Fase 1 – Memory:</strong> clicca due carte per scoprirle; se formano una coppia concetto-definizione rimangono scoperte</li>
+        <li><strong>Fase 2 – Trova l'errore:</strong> per ogni scenario leggi le 4 affermazioni e individua quella giuridicamente o tecnicamente errata</li>
+      </ul>
+      <p style="font-size:12px;color:#777;margin-top:6px">💡 <em>Il D.Lgs. 81/08, Art. 28 impone di valutare rischi da differenze di genere, età, provenienza e condizione di gravidanza o allattamento.</em></p>
+      <button class="start-btn" onclick="startGame()">▶ Inizia il Gioco</button>
+    </div>
+
+    <!-- PHASE 1: MEMORY -->
+    <div id="phase1Page" class="game-wrap hidden">
+      <div class="phase-hdr">
+        <span class="phase-badge">Fase 1 / 2</span>
+        <span class="phase-title">Memory – Concetto e Definizione</span>
+        <span class="score-r">Coppie: <b id="pairsFound">0</b>/8</span>
+      </div>
+      <div class="status-bar">
+        <span>Tentativi: <b id="triesVal">0</b></span>
+        <span style="font-size:11px;color:#888;margin-left:auto">Clicca due carte per abbinarle</span>
+      </div>
+      <div class="mem-grid" id="memGrid"></div>
+    </div>
+
+    <!-- PHASE 2: TROVA ERRORE -->
+    <div id="phase2Page" class="errore-wrap hidden">
+      <div class="phase-hdr">
+        <span class="phase-badge">Fase 2 / 2</span>
+        <span class="phase-title" id="sceneTitle"></span>
+        <span class="score-r">Errori trovati: <b id="errFound">0</b>/3</span>
+      </div>
+      <div class="scene-area">
+        <div class="img-side">
+          <div class="img-placeholder" id="imgPlaceholder">
+            <div class="ph-icon">🖼️</div>
+            <div class="ph-text">Immagine scenario</div>
+            <div class="ph-hint" id="imgHint">Sostituisci con &lt;img src="..."&gt;</div>
+          </div>
+          <div class="scene-prog" id="sceneProg">Scenario 1 di 3</div>
+        </div>
+        <div class="errors-side">
+          <h3>Quale affermazione è errata?</h3>
+          <div class="error-items" id="errorItems"></div>
+          <div class="fb-strip" id="fbStrip"></div>
+          <button class="next-scene-btn" id="nextSceneBtn" onclick="nextScene()">Scenario successivo →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEEDBACK FINALE -->
+    <div id="fbPage" class="fb-page hidden">
+      <div class="fb-box">
+        <div class="fb-icon">🎯</div>
+        <h2>Modulo Completato!</h2>
+        <p>I rischi specifici legati alle differenze individuali richiedono una valutazione personalizzata nel DVR. L'Art. 28 non è una formalità: ogni lavoratore ha caratteristiche che possono modificare il profilo di rischio.</p>
+        <div class="fb-score" id="fbScore">–</div>
+        <div class="fb-btns">
+          <button class="btn-prim" onclick="resetGame()">🔄 Rigioca</button>
+          <button class="btn-sec" onclick="window.close()">Torna al Corso</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ PHASE 1: MEMORY ============ */
+const PAIRS=[
+  {id:0, a:"Stress lavoro-correlato", b:"Risposta a stimoli dell'ambiente lavorativo che supera le capacità adattive dell'individuo, con effetti su salute e prestazione"},
+  {id:1, a:"Rischio di genere", b:"Differenze biologiche e sociali tra uomini e donne che influenzano l'esposizione e la vulnerabilità a specifici rischi occupazionali"},
+  {id:2, a:"Lavoratrice in gravidanza", b:"Soggetto con tutela speciale: vietata l'esposizione a rischi incompatibili con gestazione e allattamento (D.Lgs. 151/2001)"},
+  {id:3, a:"Lavoratore giovane (<18 anni)", b:"Categoria vulnerabile: vietati lavori pesanti, notturni e con agenti nocivi specifici per la fase di sviluppo fisico"},
+  {id:4, a:"Accomodamento ragionevole", b:"Adattamento della postazione, dell'orario o delle mansioni per consentire il lavoro a persone con limitazioni fisiche o cognitive"},
+  {id:5, a:"Valutazione preliminare stress", b:"Prima fase obbligatoria di analisi oggettiva: indici infortunistici, assenteismo, turnover, procedimenti disciplinari e richieste visite MC"},
+  {id:6, a:"DVR con differenze individuali", b:"Documento che deve contenere la valutazione specifica dei rischi per lavoratori con età, genere o condizioni particolari (Art. 28 D.Lgs. 81/08)"},
+  {id:7, a:"Lavoratore anziano (>55 anni)", b:"Categoria con maggiore vulnerabilità a rischi ergonomici, carichi cognitivi elevati e lavoro su turni notturni prolungati"},
+];
+
+let cards=[], flipped=[], matched=0, tries=0, canClick=true;
+
+function buildMemDeck(){
+  const deck=[];
+  PAIRS.forEach(p=>{
+    deck.push({uid:p.id*2,   pairId:p.id, text:p.a});
+    deck.push({uid:p.id*2+1, pairId:p.id, text:p.b});
+  });
+  return deck.sort(()=>Math.random()-.5);
+}
+
+function renderMemGrid(){
+  const grid=document.getElementById('memGrid'); grid.innerHTML='';
+  cards.forEach(card=>{
+    const el=document.createElement('div');
+    el.className='mem-card back'; el.dataset.uid=card.uid;
+    el.textContent='💡';
+    el.onclick=()=>flipMem(card.uid, el);
+    grid.appendChild(el);
+  });
+}
+
+function flipMem(uid, el){
+  if(!canClick||el.className.includes('matched')||flipped.find(f=>f.uid===uid)) return;
+  const card=cards.find(c=>c.uid===uid);
+  el.className='mem-card flipped'; el.textContent=card.text;
+  flipped.push({uid, pairId:card.pairId, el});
+  if(flipped.length===2){
+    canClick=false; tries++;
+    document.getElementById('triesVal').textContent=tries;
+    setTimeout(checkMemMatch,1000);
+  }
+}
+
+function checkMemMatch(){
+  const [a,b]=flipped;
+  if(a.pairId===b.pairId){
+    a.el.className='mem-card matched-'+a.pairId;
+    b.el.className='mem-card matched-'+a.pairId;
+    matched++;
+    document.getElementById('pairsFound').textContent=matched;
+    if(matched===PAIRS.length) setTimeout(startPhase2, 600);
+  } else {
+    a.el.className='mem-card back'; a.el.textContent='💡';
+    b.el.className='mem-card back'; b.el.textContent='💡';
+  }
+  flipped=[]; canClick=true;
+}
+
+/* ============ PHASE 2: TROVA ERRORE ============ */
+const SCENES=[
+  {
+    title:"Gestione lavoratrice in gravidanza",
+    // imgSrc: "images/gravidanza_scenario.jpg",  // ← sostituisci con il percorso immagine
+    imgHint:"Foto: lavoratrice in ufficio/reparto – es. postazione VDT o linea produzione",
+    items:[
+      {text:"La lavoratrice in gravidanza ha diritto all'astensione anticipata dal lavoro se esposta a rischi specifici non eliminabili", correct:true},
+      {text:"Il DL può legittimamente spostare la lavoratrice a mansioni equivalenti o inferiori per eliminare il rischio", correct:true},
+      {text:"La lavoratrice deve comunicare la gravidanza entro 30 giorni dal concepimento per attivare le tutele", correct:false, why:"La comunicazione non ha un termine fisso di 30 giorni dal concepimento. Le tutele scattano dalla comunicazione della gravidanza al DL (senza termine prefissato) o dalla certificazione medica. L'obbligo del DL di valutare i rischi e adottare misure sorge dalla comunicazione, non esiste un termine di 30 giorni."},
+      {text:"Il lavoro notturno è vietato per le lavoratrici in gravidanza e fino a un anno di vita del bambino", correct:true},
+    ]
+  },
+  {
+    title:"Valutazione stress lavoro-correlato",
+    // imgSrc: "images/stress_valutazione.jpg",
+    imgHint:"Foto: riunione team, lavoratore alla scrivania, ambiente ufficio open space",
+    items:[
+      {text:"La valutazione dello stress lavoro-correlato può essere saltata se nessun lavoratore ha presentato segnalazioni formali di disagio", correct:false, why:"La valutazione dello stress lavoro-correlato è obbligatoria ai sensi dell'Art. 28 D.Lgs. 81/08 indipendentemente da segnalazioni dei lavoratori. Va effettuata proattivamente seguendo le indicazioni della Commissione Consultiva (Accordo Europeo 2004) in due fasi: preliminare e approfondita."},
+      {text:"La fase preliminare di valutazione analizza indicatori oggettivi: infortuni, assenteismo, turnover e richieste di visita medica", correct:true},
+      {text:"Se la valutazione preliminare non rileva indicatori critici, non è necessaria la fase approfondita con questionari ai lavoratori", correct:true},
+      {text:"Il DVR deve contenere la descrizione del metodo di valutazione utilizzato e le misure correttive adottate", correct:true},
+    ]
+  },
+  {
+    title:"Rischi specifici per lavoratori giovani e anziani",
+    // imgSrc: "images/lavoratori_eta.jpg",
+    imgHint:"Foto: ambiente produttivo con mix generazionale di lavoratori",
+    items:[
+      {text:"I lavoratori under 18 non possono essere adibiti a lavori con esposizione a agenti chimici cancerogeni", correct:true},
+      {text:"Il lavoratore anziano over 55 non necessita di valutazione specifica se è già in sorveglianza sanitaria periodica", correct:false, why:"La valutazione dei rischi per lavoratori anziani è un obbligo specifico dell'Art. 28 indipendente dalla sorveglianza sanitaria. L'età influenza la vulnerabilità a rischi ergonomici, il recupero da fatica, la tolleranza ai turni notturni e il carico cognitivo. Il DVR deve contenere misure specifiche (adeguamento carichi, pause, orari) anche se la sorveglianza sanitaria è già attiva."},
+      {text:"Il lavoro notturno prolungato comporta rischi specifici maggiori per i lavoratori anziani rispetto ai giovani", correct:true},
+      {text:"La valutazione dei rischi di genere include l'analisi di fattori biologici e sociali che differenziano l'esposizione tra uomini e donne", correct:true},
+    ]
+  },
+];
+
+let curScene=0, errFoundCount=0;
+
+function startPhase2(){
+  curScene=0; errFoundCount=0;
+  document.getElementById('errFound').textContent='0';
+  loadScene();
+  showPage('phase2Page');
+}
+
+function loadScene(){
+  if(curScene>=SCENES.length){endGame();return;}
+  const s=SCENES[curScene];
+  document.getElementById('sceneTitle').textContent=s.title;
+  document.getElementById('sceneProg').textContent='Scenario '+(curScene+1)+' di '+SCENES.length;
+
+  // Image placeholder
+  const ph=document.getElementById('imgPlaceholder');
+  if(s.imgSrc){
+    ph.className='img-placeholder has-img';
+    ph.innerHTML='<img src="'+s.imgSrc+'" alt="'+s.title+'">';
+  } else {
+    ph.className='img-placeholder no-img';
+    ph.innerHTML='<div class="ph-icon">🖼️</div><div class="ph-text">'+s.title+'</div><div class="ph-hint">'+s.imgHint+'</div>';
+  }
+  document.getElementById('imgHint').textContent=s.imgHint;
+
+  // Items
+  const cont=document.getElementById('errorItems'); cont.innerHTML='';
+  const shuffled=[...s.items].sort(()=>Math.random()-.5);
+  shuffled.forEach(item=>{
+    const d=document.createElement('div'); d.className='error-item'; d.textContent=item.text;
+    d.onclick=()=>selectError(item, d, cont);
+    cont.appendChild(d);
+  });
+  document.getElementById('fbStrip').className='fb-strip';
+  document.getElementById('fbStrip').innerHTML='';
+  document.getElementById('nextSceneBtn').className='next-scene-btn';
+}
+
+function selectError(item, el, cont){
+  if(el.classList.contains('answered')) return;
+  [...cont.querySelectorAll('.error-item')].forEach(b=>b.classList.add('answered'));
+  if(!item.correct){
+    el.classList.add('correct-e');
+    errFoundCount++;
+    document.getElementById('errFound').textContent=errFoundCount;
+    const fb=document.getElementById('fbStrip');
+    fb.innerHTML='<b>Trovato!</b> '+item.why;
+    fb.classList.add('show');
+  } else {
+    el.classList.add('wrong-e');
+    // reveal the actual error
+    [...cont.querySelectorAll('.error-item')].forEach(b=>{
+      const txt=b.textContent;
+      const match=SCENES[curScene].items.find(i=>i.text===txt&&!i.correct);
+      if(match) b.classList.add('correct-e');
+    });
+    const fb=document.getElementById('fbStrip');
+    const wrong=SCENES[curScene].items.find(i=>!i.correct);
+    fb.innerHTML='<b>Non corretto.</b> '+wrong.why;
+    fb.classList.add('show');
+  }
+  document.getElementById('nextSceneBtn').classList.add('show');
+}
+
+function nextScene(){curScene++;loadScene();}
+
+function endGame(){
+  document.getElementById('fbScore').textContent='Memory: '+tries+' tent. | Errori trovati: '+errFoundCount+'/'+SCENES.length;
+  showPage('fbPage');
+}
+
+function startGame(){
+  matched=0; tries=0; flipped=[]; canClick=true;
+  document.getElementById('pairsFound').textContent='0';
+  document.getElementById('triesVal').textContent='0';
+  cards=buildMemDeck();
+  renderMemGrid();
+  showPage('phase1Page');
+}
+function resetGame(){showPage('instrPage');}
+function showPage(id){['instrPage','phase1Page','phase2Page','fbPage'].forEach(p=>document.getElementById(p).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
+</script>
+</body>
+</html>
